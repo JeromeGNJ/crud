@@ -1,0 +1,33 @@
+<h3> Employee List </h3>
+<p style="text-align: right;"><a class="btn btn-success" href="/employee"><i class="fa fa-plus"></i> Create New</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Salary</th>
+            <th>Photo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.fullName}}</td>
+            <td>{{this.dob}}</td>
+            <td>{{this.salary}}</td>
+            <td><img src=''></td>
+
+            <td>
+<p style="text-align: right;">
+                <a class="btn btn-primary" href="/employee/{{this._id}}">Edit</a>
+                <a class="btn btn-danger" href="/employee/delete/{{this._id}}"
+                    onclick="return confirm('Are you sure to delete this record ?');">Delete</a>
+ </p>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

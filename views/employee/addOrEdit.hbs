@@ -1,0 +1,41 @@
+<h3>{{viewTitle}}</h3>
+
+<form action="/employee" method="POST" autocomplete="on">
+    <label>{{employee.id}}</label>
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{employee.fullName}}">
+        <div class="text-danger">
+            {{employee.fullNameError}}</div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Salary</label>
+            <input type="number" class="form-control" name="salary" placeholder="salary" value="{{employee.salary}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>DOB</label>
+            <input type="date" class="form-control" name="dob" placeholder="dob" value="{{employee.dob}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Photo</label>
+            <input type="image" class="form-control" name="photo" placeholder="photo" value="{{employee.photo}}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Skills</label>
+            <input type="checkbox" class="form-control" name="skills" placeholder="skills" value="{{employee.skills}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">{{bttn}}</button>
+        <a class="btn btn-dark" href="/employee/list"> View All <i class="fa fa-chevron-right"></i></a>
+        <a ngIf='!bttn"' class="btn btn-danger" href="/employee/delete/{{employee._id}}"
+                    onclick="return confirm('Are you sure to delete this record ?');">Delete</a>
+ </div>
+</form>
