@@ -2,7 +2,7 @@ const express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const Employee = mongoose.model('Employee');
-var pic = {link: ''};
+var pic = { link: '' };
 var path = require('path');
 var fs = require('fs');
 const fileUpload = require('express-fileupload');
@@ -23,26 +23,25 @@ router.get('/', (req, res) => {
 
 
 router.post('/', (req, res) => {
-    console.log(req.body);
     if (req.body.info == 'Create')
         insertRecord(req, res);
-        else
+    else
         updateRecord(req, res);
 });
 
 function base64_encode(file) {
     // read binary data
     console.log(File);
-    var bitmap = fs.readlinkSync(file,'buffer');
+    var bitmap = fs.readlinkSync(file, 'buffer');
     console.log(bitmap);
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
-   }
+}
 
 
 function insertRecord(req, res) {
- //   console.log('insert', req.body);
- //   var base64str = base64_encode(req.body.photo);
+    //   console.log('insert', req.body);
+    //   var base64str = base64_encode(req.body.photo);
     console.log(req.body);
     var employee = new Employee();
     employee.fullName = req.body.fullName;
@@ -55,7 +54,7 @@ function insertRecord(req, res) {
         if (!err) {
             console.log('doc', doc);
             res.redirect('employee/list');
-          }  else {
+        } else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
                 res.render("employee/addOrEdit", {
@@ -74,32 +73,40 @@ function insertRecord(req, res) {
 
 function updateRecord(req, res) {
     console.log('update', req.body);
-    
-    Employee.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
-        if (!err) { res.redirect('employee/list'); }
-        else {
-            if (err.name == 'ValidationError') {
-                handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: 'Edit Employee',
-                    employee: req.body,
-                    bttn: 'Update',
-                    del: false
-                });
+    if (req.body.photo) { pic = req.body.photo; } else { pic = ''; }
+    Employee.updateOne({
+        _id: req.body._id},
+     {   dob: req.body.dob,
+        photo: pic,
+        fullName: req.body.fullName,
+        salary: req.body.salary,
+        skills: req.body.skillset
+    },
+        (err, doc) => {
+            if (!err) { res.redirect('employee/list'); }
+            else {
+                if (err.name == 'ValidationError') {
+                    handleValidationError(err, req.body);
+                    res.render("employee/addOrEdit", {
+                        viewTitle: 'Edit Employee',
+                        employee: req.body,
+                        bttn: 'Update',
+                        del: false
+                    });
+                }
+                else
+                    console.log('Error during record update : ' + err);
             }
-            else
-                console.log('Error during record update : ' + err);
-        }
-    });
+        });
 }
 
 router.post('/list', (req, res) => {
-   // console.log(req.body);
-    empmodel.searchName(req.body.search).then(function(secret) {
+    // console.log(req.body);
+    empmodel.searchName(req.body.search).then(function (secret) {
         console.log(secret);
-            res.render("employee/list", {
-                list: secret
-            });
+        res.render("employee/list", {
+            list: secret
+        });
     });
 })
 
@@ -107,17 +114,17 @@ router.post('/list', (req, res) => {
 router.get('/list', (req, res) => {
     console.log(req.body);
     Employee.find((err, docs) => {
-       // console.log('db', docs);
+        // console.log('db', docs);
         if (!err) {
             const pageCount = Math.ceil(docs.length / 10);
             let page = parseInt(1);
-            if (!page) { page = 1;}
+            if (!page) { page = 1; }
             if (page > pageCount) {
                 page = pageCount
             }
             pages = [];
             for (let index = 1; index <= pageCount; index++) {
-                pages.push({item: index});
+                pages.push({ item: index });
             }
             console.log(page, pageCount, pages);
             res.render("employee/list", {
