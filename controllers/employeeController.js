@@ -50,9 +50,7 @@ function insertRecord(req, res) {
     if (req.body.photo) { employee.photo = req.body.photo; }
     employee.dob = req.body.dob;
     employee.salary = req.body.salary;
-    employee.skills = req.body.skills;
-
-
+    employee.skills = req.body.skillset;
     employee.save((err, doc) => {
         if (!err) {
             console.log('doc', doc);
@@ -96,29 +94,36 @@ function updateRecord(req, res) {
 }
 
 router.post('/list', (req, res) => {
+   // console.log(req.body);
     empmodel.searchName(req.body.search).then(function(secret) {
         console.log(secret);
-        res.render("employee/list", {
-            list: secret
-        });
+            res.render("employee/list", {
+                list: secret
+            });
     });
-    console.log(req.body, 'btn');
 })
 
+
 router.get('/list', (req, res) => {
+    console.log(req.body);
     Employee.find((err, docs) => {
-        console.log('db', docs);
+       // console.log('db', docs);
         if (!err) {
             const pageCount = Math.ceil(docs.length / 10);
-            let page = parseInt(2);
+            let page = parseInt(1);
             if (!page) { page = 1;}
             if (page > pageCount) {
                 page = pageCount
             }
-            pages = [...Array(pageCount).keys()];
+            pages = [];
+            for (let index = 1; index <= pageCount; index++) {
+                pages.push({item: index});
+            }
             console.log(page, pageCount, pages);
             res.render("employee/list", {
-                list: docs.slice(page * 10 - 10, page * 10)
+                list: docs.slice(page * 10 - 10, page * 10),
+                pages: pages,
+                page: page
             });
         }
         else {
