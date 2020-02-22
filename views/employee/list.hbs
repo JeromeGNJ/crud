@@ -1,5 +1,20 @@
 <h3> Employee List </h3>
 <p style="text-align: right;"><a class="btn btn-success" href="/employee"><i class="fa fa-plus"></i> Create New</a></p>
+<form action='/employee/list' method="POST" autocomplete="on">
+    <div class="form-group">
+        <table>
+            <tr>
+                <td>
+                    <input type='text' name='search' placeholder='Search by Name'>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success">Search</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+<br>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -7,8 +22,8 @@
             <th>Name</th>
             <th>DOB</th>
             <th>Salary</th>
+            <th>Skills</th>
             <th>Photo</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -18,16 +33,40 @@
             <td>{{this.fullName}}</td>
             <td>{{this.dob}}</td>
             <td>{{this.salary}}</td>
-            <td><img src=''></td>
+            <td>{{this.skills}}</td>
+            <td><img src={{this.photo}}></td>
+
 
             <td>
-<p style="text-align: right;">
-                <a class="btn btn-primary" href="/employee/{{this._id}}">Edit</a>
-                <a class="btn btn-danger" href="/employee/delete/{{this._id}}"
-                    onclick="return confirm('Are you sure to delete this record ?');">Delete</a>
- </p>
+                <p style="text-align: right;">
+                    <a class="btn btn-primary" name='uid' value={{this._id}} href="/employee/{{this._id}}">Edit</a>
+                    <a class="btn btn-danger" href="/employee/delete/{{this._id}}"
+                        onclick="return confirm('Are you sure to delete this record ?');">Delete</a>
+                </p>
             </td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+
+    <nav aria-label="...">
+        <ul class="pagination">
+
+            <li class="page-item">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+
+            <li class="page-item"><a class="page-link">1</a></li>
+
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+           
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+            
+        </ul>
+    </nav>
