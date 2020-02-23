@@ -7,6 +7,8 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 mongoose.set('useFindAndModify', false);
 const empmodel = require('../models/employee.model');
+const { promisify } = require('util')
+
 
 router.get('/', (req, res) => {
     res.render("employee/addOrEdit", {
@@ -79,6 +81,9 @@ function insertRecord(req, res, picData) {
     employee.save((err, doc) => {
         if (!err) {
             console.log('doc', doc);
+            if (picData) {
+                fs.unlinkSync(picData.path);
+            }
             res.redirect('employee/list');
         } else {
             if (err.name == 'ValidationError') {
@@ -187,40 +192,41 @@ router.post('/list', (req, res) => {
             }
         });
     } else {
-    if (req.body.search) {
-        empmodel.searchName(req.body.search).then(function (secret) {
-            if (secret) {
-                res.render("employee/list", {
-                    list: secret
-                });
-            }
-        });
-    } else {
-        Employee.find((err, docs) => {
-            //; console.log('db', docs);
-            if (!err) {
-                const pageCount = Math.ceil(docs.length / 10);
-                let page = parseInt(1);
-                if (!page) { page = 1; }
-                if (page > pageCount) {
-                    page = pageCount
+        if (req.body.search) {
+            empmodel.searchName(req.body.search).then(function (secret) {
+                if (secret) {
+                    res.render("employee/list", {
+                        list: secret
+                    });
                 }
-                pages = [];
-                for (let index = 1; index <= pageCount; index++) {
-                    pages.push({ item: index });
+            });
+        } else {
+            Employee.find((err, docs) => {
+                //; console.log('db', docs);
+                if (!err) {
+                    const pageCount = Math.ceil(docs.length / 10);
+                    let page = parseInt(1);
+                    if (!page) { page = 1; }
+                    if (page > pageCount) {
+                        page = pageCount
+                    }
+                    pages = [];
+                    for (let index = 1; index <= pageCount; index++) {
+                        pages.push({ item: index });
+                    }
+                    console.log(page, pageCount, pages);
+                    res.render("employee/list", {
+                        list: docs.slice(page * 10 - 10, page * 10),
+                        pages: pages,
+                        page: page
+                    });
                 }
-                console.log(page, pageCount, pages);
-                res.render("employee/list", {
-                    list: docs.slice(page * 10 - 10, page * 10),
-                    pages: pages,
-                    page: page
-                });
-            }
-            else {
-                console.log('Error in retrieving employee list :' + err);
-            }
-        });
-    } }
+                else {
+                    console.log('Error in retrieving employee list :' + err);
+                }
+            });
+        }
+    }
 })
 
 
