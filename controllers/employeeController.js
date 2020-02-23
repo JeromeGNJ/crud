@@ -113,6 +113,32 @@ function updateRecord(req, res) {
 router.post('/list', (req, res) => {
     // console.log(req.body);
     console.log(req.body);
+if (req.body.info) {
+    Employee.find((err, docs) => {
+        //; console.log('db', docs);
+        if (!err) {
+            const pageCount = Math.ceil(docs.length / 10);
+            let page = parseInt(req.body.info);
+            if (!page) { page = 1; }
+            if (page > pageCount) {
+                page = pageCount
+            }
+            pages = [];
+            for (let index = 1; index <= pageCount; index++) {
+                pages.push({ item: index });
+            }
+            console.log(page, pageCount, pages);
+            res.render("employee/list", {
+                list: docs.slice(page * 10 - 10, page * 10),
+                pages: pages,
+                page: page
+            });
+        }
+        else {
+            console.log('Error in retrieving employee list :' + err);
+        }
+    });
+}
 if (req.body.search) {
     empmodel.searchName(req.body.search).then(function (secret) {
         console.log(secret);

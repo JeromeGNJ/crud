@@ -52,25 +52,15 @@
 </table>
 <form action='/employee/list' method="POST">
     <nav aria-label="...">
-        <ul class="pagination">
-            <button type="submit" class="btn btn-success">
-                <li class="page-item">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
+        <ul class="pagination" style="text-align: center;">
             </button>
             {{#each pages}}
-            <button  name='info' value={{this.item}} type="submit" class="btn btn-success">
+            <button  name='info' value={{this.item}} type="submit" class="btn btn-primary">
                 <li class="page-item">
                     {{this.item}}
                 </li>
             </button>
             {{/each}}
-            <button type="submit" class="btn btn-success">
-
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </button>
         </ul>
     </nav>
 </form>
