@@ -10,7 +10,6 @@ var mongoose_fuzzy_searching = require("mongoose-fuzzy-searching-v2");
 var connection = mongoose.createConnection(uri);
 autoIncrement.initialize(connection);
 
-var skill = new mongoose.Schema({ name: String });
 
 var employeeSchema = new mongoose.Schema({
     id: {

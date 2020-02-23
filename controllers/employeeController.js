@@ -42,7 +42,7 @@ router.post('/', upload.single('file'), (req, res, next) => {
                 if (err) throw err;
                 let picData = data.toString('base64');
                 updateRecord(req, res, picData);
-            
+
             });
         } else { updateRecord(req, res); }
     }
@@ -267,42 +267,42 @@ router.get('/api/list', (req, res) => {
 });
 
 router.get('/api/create/:name&:salary&:dob&:skills', (req, res) => {
-   // res.json({result: req.params});
+    // res.json({result: req.params});
     var employee = new Employee();
     skillset = JSON.stringify(req.params.skills);
-    skillset = skillset.slice(2,skillset.length-2);
+    skillset = skillset.slice(2, skillset.length - 2);
     skillList = skillset.split(',');
     skillDataRaw = {};
     for (let index = 0; index < skillList.length; index++) {
         const element = skillList[index];
         k = element.split(':')[0];
         v = element.split(':')[1];
-        v = v.slice(1,v.length-1)
-        skillDataRaw[k] = v;       
+        v = v.slice(1, v.length - 1)
+        skillDataRaw[k] = v;
     }
-  //  console.log(skillData);
+    //  console.log(skillData);
     skillData =
     {
         python: skillDataRaw.python || 'hidden',
-        NodeJS: skillDataRaw.NodeJS  || 'hidden',
-        Angular: skillDataRaw.Angular  || 'hidden',
-        R: skillDataRaw.R  || 'hidden',
-        Javascript: skillDataRaw.Javascript  || 'hidden',
-        HTML: skillDataRaw.HTML  || 'hidden',
-        CSS: skillDataRaw.CSS  || 'hidden',
-        Java: skillDataRaw.Java  || 'hidden',
-        React: skillDataRaw.React  || 'hidden',
+        NodeJS: skillDataRaw.NodeJS || 'hidden',
+        Angular: skillDataRaw.Angular || 'hidden',
+        R: skillDataRaw.R || 'hidden',
+        Javascript: skillDataRaw.Javascript || 'hidden',
+        HTML: skillDataRaw.HTML || 'hidden',
+        CSS: skillDataRaw.CSS || 'hidden',
+        Java: skillDataRaw.Java || 'hidden',
+        React: skillDataRaw.React || 'hidden',
         Kotlin: skillDataRaw.Kotlin || 'hidden'
     };
 
-    employee.fullName = req.params.name.slice(1,req.params.name.length-1);
-    employee.dob = req.params.dob.slice(1,req.params.dob.length-1);
+    employee.fullName = req.params.name.slice(1, req.params.name.length - 1);
+    employee.dob = req.params.dob.slice(1, req.params.dob.length - 1);
     employee.salary = req.params.salary;
     employee.skills = skillData;
     employee.save((err, doc) => {
         if (!err) {
             console.log('doc', doc);
-            res.json({result: 'success'});
+            res.json({ result: 'success' });
         } else {
             if (err.name == 'ValidationError') {
                 handleValidationError(err, req.body);
@@ -315,40 +315,40 @@ router.get('/api/create/:name&:salary&:dob&:skills', (req, res) => {
                 });
             }
             else
-            res.json({error: err});
+                res.json({ error: err });
         }
     });
 });
 
 router.get('/api/update/:id&:name&:salary&:dob&:skills', (req, res) => {
     skillset = JSON.stringify(req.params.skills);
-    skillset = skillset.slice(2,skillset.length-2);
+    skillset = skillset.slice(2, skillset.length - 2);
     skillList = skillset.split(',');
     skillDataRaw = {};
     for (let index = 0; index < skillList.length; index++) {
         const element = skillList[index];
         k = element.split(':')[0];
         v = element.split(':')[1];
-        v = v.slice(1,v.length-1)
-        skillDataRaw[k] = v;       
+        v = v.slice(1, v.length - 1)
+        skillDataRaw[k] = v;
     }
-  //  console.log(skillData);
+    //  console.log(skillData);
     skillData =
     {
         python: skillDataRaw.python || 'hidden',
-        NodeJS: skillDataRaw.NodeJS  || 'hidden',
-        Angular: skillDataRaw.Angular  || 'hidden',
-        R: skillDataRaw.R  || 'hidden',
-        Javascript: skillDataRaw.Javascript  || 'hidden',
-        HTML: skillDataRaw.HTML  || 'hidden',
-        CSS: skillDataRaw.CSS  || 'hidden',
-        Java: skillDataRaw.Java  || 'hidden',
-        React: skillDataRaw.React  || 'hidden',
+        NodeJS: skillDataRaw.NodeJS || 'hidden',
+        Angular: skillDataRaw.Angular || 'hidden',
+        R: skillDataRaw.R || 'hidden',
+        Javascript: skillDataRaw.Javascript || 'hidden',
+        HTML: skillDataRaw.HTML || 'hidden',
+        CSS: skillDataRaw.CSS || 'hidden',
+        Java: skillDataRaw.Java || 'hidden',
+        React: skillDataRaw.React || 'hidden',
         Kotlin: skillDataRaw.Kotlin || 'hidden'
     };
     data = {
-        dob: req.params.dob.slice(1,req.params.dob.length-1),
-        fullName: req.params.name.slice(1,req.params.name.length-1),
+        dob: req.params.dob.slice(1, req.params.dob.length - 1),
+        fullName: req.params.name.slice(1, req.params.name.length - 1),
         salary: req.params.salary,
         skills: skillData
     }
@@ -357,11 +357,11 @@ router.get('/api/update/:id&:name&:salary&:dob&:skills', (req, res) => {
     },
         data,
         (err, doc) => {
-            if (!err) { res.json({result: 'success'}); }
+            if (!err) { res.json({ result: 'success' }); }
             else {
                 if (err.name == 'ValidationError') {
                     handleValidationError(err, req.body);
-                    res.json({error: err});
+                    res.json({ error: err });
                 }
                 else
                     console.log('Error during record update : ' + err);
