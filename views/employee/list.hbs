@@ -53,14 +53,23 @@
 <form action='/employee/list' method="POST">
     <nav aria-label="...">
         <ul class="pagination" style="text-align: center;">
+
+            <button name='info' value=1 type="submit" class="btn btn-primary">
+                <li class="page-item">
+                    First Page </li>
             </button>
+
             {{#each pages}}
-            <button  name='info' value={{this.item}} type="submit" class="btn btn-primary">
+            <button name='info' value={{this.item}} type="submit" class="btn btn-primary">
                 <li class="page-item">
                     {{this.item}}
                 </li>
             </button>
             {{/each}}
+                        <button name='info' value={{pages.length}} type="submit" class="btn btn-primary">
+                <li class="page-item">
+                    Last Page </li>
+            </button>
         </ul>
     </nav>
 </form>
