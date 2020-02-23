@@ -186,7 +186,7 @@ router.post('/list', (req, res) => {
                 console.log('Error in retrieving employee list :' + err);
             }
         });
-    }
+    } else {
     if (req.body.search) {
         empmodel.searchName(req.body.search).then(function (secret) {
             if (secret) {
@@ -220,7 +220,7 @@ router.post('/list', (req, res) => {
                 console.log('Error in retrieving employee list :' + err);
             }
         });
-    }
+    } }
 })
 
 
