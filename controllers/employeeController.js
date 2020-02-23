@@ -3,7 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const Employee = mongoose.model('Employee');
 var fs = require('fs');
-const multer  = require('multer');
+const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 mongoose.set('useFindAndModify', false);
 const empmodel = require('../models/employee.model');
@@ -21,23 +21,31 @@ router.post('/file_upload', upload.single('file'), (req, res, next) => {
     fs.readFile(req.file.path, (err, data) => {
         if (err) throw err;
         data.toString('base64');
-      });
-         // const encoded = req.file.buffer.toString('base64');
+    });
+    // const encoded = req.file.buffer.toString('base64');
     //console.log(encoded);
-  })
+})
 
 router.post('/', upload.single('file'), (req, res, next) => {
-   
-    if (req.body.info == 'Create'){
+
+    if (req.body.info == 'Create') {
         if (req.file) {
             fs.readFile(req.file.path, (err, data) => {
                 if (err) throw err;
                 let picData = data.toString('base64');
-                insertRecord(req, res, picData); 
-              });
-        }
-    } else
-       { updateRecord(req, res); }
+                insertRecord(req, res, picData);
+            });
+        } else { insertRecord(req, res); }
+    } else {
+        if (req.file) {
+            fs.readFile(req.file.path, (err, data) => {
+                if (err) throw err;
+                let picData = data.toString('base64');
+                updateRecord(req, res, picData);
+            
+            });
+        } else { updateRecord(req, res); }
+    }
 });
 
 
@@ -89,7 +97,7 @@ function insertRecord(req, res, picData) {
     });
 }
 
-function updateRecord(req, res) {
+function updateRecord(req, res, picData) {
     console.log('update', req.body);
     skillData =
     {
@@ -107,14 +115,15 @@ function updateRecord(req, res) {
 
     if (req.body.photo) {
         if (req.body.photo.length > 0) {
-
             data = {
                 dob: req.body.dob,
-                photo: req.body.photo,
                 fullName: req.body.fullName,
                 salary: req.body.salary,
                 skills: skillData
             }
+        }
+        if (picData) {
+            data.photo = picData;
         }
     } else {
         data = {
@@ -122,6 +131,9 @@ function updateRecord(req, res) {
             fullName: req.body.fullName,
             salary: req.body.salary,
             skills: skillData
+        }
+        if (picData) {
+            data.photo = picData;
         }
     }
     console.log(data);
@@ -252,6 +264,110 @@ router.get('/api/list', (req, res) => {
             });
         }
     });
+});
+
+router.get('/api/create/:name&:salary&:dob&:skills', (req, res) => {
+   // res.json({result: req.params});
+    var employee = new Employee();
+    skillset = JSON.stringify(req.params.skills);
+    skillset = skillset.slice(2,skillset.length-2);
+    skillList = skillset.split(',');
+    skillDataRaw = {};
+    for (let index = 0; index < skillList.length; index++) {
+        const element = skillList[index];
+        k = element.split(':')[0];
+        v = element.split(':')[1];
+        v = v.slice(1,v.length-1)
+        skillDataRaw[k] = v;       
+    }
+  //  console.log(skillData);
+    skillData =
+    {
+        python: skillDataRaw.python || 'hidden',
+        NodeJS: skillDataRaw.NodeJS  || 'hidden',
+        Angular: skillDataRaw.Angular  || 'hidden',
+        R: skillDataRaw.R  || 'hidden',
+        Javascript: skillDataRaw.Javascript  || 'hidden',
+        HTML: skillDataRaw.HTML  || 'hidden',
+        CSS: skillDataRaw.CSS  || 'hidden',
+        Java: skillDataRaw.Java  || 'hidden',
+        React: skillDataRaw.React  || 'hidden',
+        Kotlin: skillDataRaw.Kotlin || 'hidden'
+    };
+
+    employee.fullName = req.params.name.slice(1,req.params.name.length-1);
+    employee.dob = req.params.dob.slice(1,req.params.dob.length-1);
+    employee.salary = req.params.salary;
+    employee.skills = skillData;
+    employee.save((err, doc) => {
+        if (!err) {
+            console.log('doc', doc);
+            res.json({result: 'success'});
+        } else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("employee/addOrEdit", {
+                    viewTitle: "Create Employee",
+                    employee: req.body,
+                    bttn: 'Create',
+                    del: 'hidden'
+
+                });
+            }
+            else
+            res.json({error: err});
+        }
+    });
+});
+
+router.get('/api/update/:id&:name&:salary&:dob&:skills', (req, res) => {
+    skillset = JSON.stringify(req.params.skills);
+    skillset = skillset.slice(2,skillset.length-2);
+    skillList = skillset.split(',');
+    skillDataRaw = {};
+    for (let index = 0; index < skillList.length; index++) {
+        const element = skillList[index];
+        k = element.split(':')[0];
+        v = element.split(':')[1];
+        v = v.slice(1,v.length-1)
+        skillDataRaw[k] = v;       
+    }
+  //  console.log(skillData);
+    skillData =
+    {
+        python: skillDataRaw.python || 'hidden',
+        NodeJS: skillDataRaw.NodeJS  || 'hidden',
+        Angular: skillDataRaw.Angular  || 'hidden',
+        R: skillDataRaw.R  || 'hidden',
+        Javascript: skillDataRaw.Javascript  || 'hidden',
+        HTML: skillDataRaw.HTML  || 'hidden',
+        CSS: skillDataRaw.CSS  || 'hidden',
+        Java: skillDataRaw.Java  || 'hidden',
+        React: skillDataRaw.React  || 'hidden',
+        Kotlin: skillDataRaw.Kotlin || 'hidden'
+    };
+    data = {
+        dob: req.params.dob.slice(1,req.params.dob.length-1),
+        fullName: req.params.name.slice(1,req.params.name.length-1),
+        salary: req.params.salary,
+        skills: skillData
+    }
+    Employee.updateOne({
+        _id: req.pram.id
+    },
+        data,
+        (err, doc) => {
+            if (!err) { res.json({result: 'success'}); }
+            else {
+                if (err.name == 'ValidationError') {
+                    handleValidationError(err, req.body);
+                    res.json({error: err});
+                }
+                else
+                    console.log('Error during record update : ' + err);
+            }
+        });
+
 });
 
 function handleValidationError(err, body) {
