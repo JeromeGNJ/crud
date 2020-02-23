@@ -80,9 +80,9 @@ function insertRecord(req, res, picData) {
     employee.skills = skillData;
     employee.save((err, doc) => {
         if (!err) {
-            console.log('doc', doc);
+          //  console.log('doc', doc);
             if (picData) {
-                fs.unlinkSync(picData.path);
+               // fs.unlinkSync(picData.path);
             }
             res.redirect('employee/list');
         } else {
