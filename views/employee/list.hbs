@@ -47,9 +47,9 @@
 
                 </td>
             <td>
-                <img class="logo"
-                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                    height='100px' width='100px' alt="No Internet"></td>
+                <img 
+                src = "data:image/png;base64, " + {{this.photo}}
+                    alt="No Image Available"></td>
             <td>
                 <p style="text-align: right;">
                     <a class="btn btn-primary" name='uid' value={{this._id}} href="/employee/{{this._id}}">Edit</a>

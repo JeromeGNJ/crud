@@ -2,12 +2,12 @@ const express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const Employee = mongoose.model('Employee');
-var pic = { link: '' };
-var path = require('path');
 var fs = require('fs');
-const fileUpload = require('express-fileupload');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
 mongoose.set('useFindAndModify', false);
 const empmodel = require('../models/employee.model');
+
 router.get('/', (req, res) => {
     res.render("employee/addOrEdit", {
         viewTitle: "Create Employee",
@@ -16,25 +16,32 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/file_upload', upload.single('file'), (req, res, next) => {
+    console.log(req.file);
+    fs.readFile(req.file.path, (err, data) => {
+        if (err) throw err;
+        data.toString('base64');
+      });
+         // const encoded = req.file.buffer.toString('base64');
+    //console.log(encoded);
+  })
 
-router.post('/', (req, res) => {
-    if (req.body.info == 'Create')
-        insertRecord(req, res);
-    else
-        updateRecord(req, res);
+router.post('/', upload.single('file'), (req, res, next) => {
+   
+    if (req.body.info == 'Create'){
+        if (req.file) {
+            fs.readFile(req.file.path, (err, data) => {
+                if (err) throw err;
+                let picData = data.toString('base64');
+                insertRecord(req, res, picData); 
+              });
+        }
+    } else
+       { updateRecord(req, res); }
 });
 
-function base64_encode(file) {
-    // read binary data
-    console.log(File);
-    var bitmap = fs.readlinkSync(file, 'buffer');
-    console.log(bitmap);
-    // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
-}
 
-
-function insertRecord(req, res) {
+function insertRecord(req, res, picData) {
     //   console.log('insert', req.body);
     //   var base64str = base64_encode(req.body.photo);
     console.log(req.body);
@@ -55,8 +62,8 @@ function insertRecord(req, res) {
 
     employee.fullName = req.body.fullName;
     employee.id = req.body.id;
-    if (req.body.photo) {
-        employee.photo = req.body.photo;
+    if (picData) {
+        employee.photo = picData;
     }
     employee.dob = req.body.dob;
     employee.salary = req.body.salary;

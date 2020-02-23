@@ -1,5 +1,9 @@
 <h3>{{viewTitle}}</h3>
-<form action="/employee" method="POST" autocomplete="on">
+<form action="/employee/file_upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="UploadFile" />
+</form>
+<form action="/employee" method="POST" autocomplete="on" enctype="multipart/form-data">
     <div class="form-group">
         <input hidden type='text' name='_id' value={{employee._id}}>
         <label>Name *</style></label>
@@ -24,12 +28,13 @@
         </div>
     </div>
     <div class="form-row">
-    <!--    <div class="form-group col-md-6">
-            <label>Photo (optional)</label>
-            <input type="file" accept=".png, .jpg, .jpeg" class="form-control" name="photo" placeholder="photo"
-                value="{{employee.photo}}">
-        </div> -->
-   
+                <div class="form-group col-md-6">
+
+        <label>Photo</label><br>
+        <input type="file" name="file" />
+        <br>
+        </div>
+    
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -57,10 +62,12 @@
                 <label for="Kotlin">Kotlin</label><br>
                 <br>
             </fieldset>
-             <div class="text-danger">
+            <div class="text-danger">
                 {{employee.skillsError}}</div>
         </div>
     </div>
+
+
     <div class="form-group">
         <button type="submit" class="btn btn-success" name='info' value={{bttn}}>{{bttn}}</button>
         <a class="btn btn-dark" href="/employee/list"> View All <i class="fa fa-chevron-right"></i></a>
