@@ -6,14 +6,10 @@ var pic = { link: '' };
 var path = require('path');
 var fs = require('fs');
 const fileUpload = require('express-fileupload');
-const app = express();
 mongoose.set('useFindAndModify', false);
 const empmodel = require('../models/employee.model');
-const paginate = require('express-paginate');
-app.use(paginate.middleware(10, 50));
 
 router.get('/', (req, res) => {
-
     res.render("employee/addOrEdit", {
         viewTitle: "Create Employee",
         bttn: 'Create',
@@ -46,7 +42,9 @@ function insertRecord(req, res) {
     var employee = new Employee();
     employee.fullName = req.body.fullName;
     employee.id = req.body.id;
-    if (req.body.photo) { employee.photo = req.body.photo; }
+    if (req.body.photo) {
+        employee.photo = req.body.photo;
+    }
     employee.dob = req.body.dob;
     employee.salary = req.body.salary;
     employee.skills = req.body.skillset;
@@ -73,15 +71,27 @@ function insertRecord(req, res) {
 
 function updateRecord(req, res) {
     console.log('update', req.body);
-    if (req.body.photo) { pic = req.body.photo; } else { pic = ''; }
+    if (req.body.photo.length > 0) {
+        data = {
+            dob: req.body.dob,
+            photo: req.body.photo,
+            fullName: req.body.fullName,
+            salary: req.body.salary,
+            skills: req.body.skillset
+        }
+    } else {
+        data = {
+            dob: req.body.dob,
+            fullName: req.body.fullName,
+            salary: req.body.salary,
+            skills: req.body.skillset
+        }
+    }
+    console.log(data);
     Employee.updateOne({
-        _id: req.body._id},
-     {   dob: req.body.dob,
-        photo: pic,
-        fullName: req.body.fullName,
-        salary: req.body.salary,
-        skills: req.body.skillset
+        _id: req.body._id
     },
+        data,
         (err, doc) => {
             if (!err) { res.redirect('employee/list'); }
             else {
@@ -102,19 +112,20 @@ function updateRecord(req, res) {
 
 router.post('/list', (req, res) => {
     // console.log(req.body);
+    console.log(req.body);
+if (req.body.search) {
     empmodel.searchName(req.body.search).then(function (secret) {
         console.log(secret);
         res.render("employee/list", {
             list: secret
         });
-    });
+    }); }
 })
 
 
 router.get('/list', (req, res) => {
-    console.log(req.body);
     Employee.find((err, docs) => {
-        // console.log('db', docs);
+        //; console.log('db', docs);
         if (!err) {
             const pageCount = Math.ceil(docs.length / 10);
             let page = parseInt(1);

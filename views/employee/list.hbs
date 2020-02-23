@@ -34,9 +34,11 @@
             <td>{{this.dob}}</td>
             <td>{{this.salary}}</td>
             <td>{{this.skills}}</td>
-            <td><img src={{this.photo}}></td>
-
-
+            <td>
+                <img ngIf={{this.photo}} class="logo" src={{this.photo}} alt="No photo">
+                <img ngIf={{this.photo}} class="logo"
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                    height='100px' width='100px' alt="No Internet"></td>
             <td>
                 <p style="text-align: right;">
                     <a class="btn btn-primary" name='uid' value={{this._id}} href="/employee/{{this._id}}">Edit</a>
@@ -48,24 +50,27 @@
         {{/each}}
     </tbody>
 </table>
-
-<nav aria-label="...">
-    <ul class="pagination">
-
-        <li class="page-item">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-        </li>
+<form action='/employee/list' method="POST">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <button type="submit" class="btn btn-success">
+                <li class="page-item">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            </button>
             {{#each pages}}
-
-            <li class="page-item">
-                <button >{{this.item}}</button></li>
-                <input id='btnsave' class="btn btn-primary" >Edit</a>
-
-
+            <button  name='info' value={{this.item}} type="submit" class="btn btn-success">
+                <li class="page-item">
+                    {{this.item}}
+                </li>
+            </button>
             {{/each}}
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
+            <button type="submit" class="btn btn-success">
 
-    </ul>
-</nav>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </button>
+        </ul>
+    </nav>
+</form>
