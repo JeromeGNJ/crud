@@ -33,10 +33,21 @@
             <td>{{this.fullName}}</td>
             <td>{{this.dob}}</td>
             <td>{{this.salary}}</td>
-            <td>{{this.skills}}</td>
             <td>
-                <img ngIf={{this.photo}} class="logo" src={{this.photo}} alt="No photo">
-                <img ngIf={{this.photo}} class="logo"
+               <p {{this.skills.python}}>Python</p>
+               <p {{this.skills.NodeJS}} >NodeJS</p>
+               <p {{this.skills.Angular}}>Angular</p>
+               <a {{this.skills.R}}>R</a>
+               <p {{this.skills.Javascript}}>Javascript</p>
+               <p {{this.skills.HTML}}>HTML</p>
+               <p {{this.skills.CSS}}>CSS</p>
+               <p {{this.skills.Java}}>Java</p>
+               <p {{this.skills.React}}>React</p>
+               <p {{this.skills.Kotlin}}>Kotlin</p>
+
+                </td>
+            <td>
+                <img class="logo"
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                     height='100px' width='100px' alt="No Internet"></td>
             <td>

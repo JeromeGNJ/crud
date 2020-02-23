@@ -32,7 +32,7 @@ var employeeSchema = new mongoose.Schema({
         type: String
     },
     skills: {
-        type: Array,
+        type: Object,
         required:  'Required.'
         }
 });

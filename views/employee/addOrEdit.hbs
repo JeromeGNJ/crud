@@ -38,16 +38,26 @@
         <div class="form-group col-md-6">
             <label>Skills *</label>
             <fieldset>
-                <input type="checkbox" name="skillset" value="Python">Python<br>
-                <input type="checkbox" name="skillset" value="NodeJS">NodeJS<br>
-                <input type="checkbox" name="skillset" value="Angular">Angular<br>
-                <input type="checkbox" name="skillset" value="R">R<br>
-                <input type="checkbox" name="skillset" value="Javascript">Javascript<br>
-                <input type="checkbox" name="skillset" value="HTML">HTML<br>
-                <input type="checkbox" name="skillset" value="CSS">CSS<br>
-                <input type="checkbox" name="skillset" value="Java">Java<br>
-                <input type="checkbox" name="skillset" value="React">React<br>
-                <input type="checkbox" name="skillset" value="Kotlin">Kotlin<br>
+                <input type="checkbox" {{this.skills.python}} name="python" value="checked">
+                <label for="python">Python</label><br>
+                <input type="checkbox" {{this.skills.NodeJS}} name="NodeJS" value="checked">
+                <label for="NodeJS">NodeJS</label><br>
+                <input type="checkbox" {{this.skills.Angular}} name="Angular" value="checked">
+                <label for="Angular">Angular</label><br>
+                <input type="checkbox" {{this.skills.R}} name="R" value="checked">
+                <label for="R">R</label><br>
+                <input type="checkbox" {{this.skills.Javascript}} name="Javascript" value="checked">
+                <label for="Javascript">Javascript</label><br>
+                <input type="checkbox" {{this.skills.HTML}} name="HTML" value="checked">
+                <label for="HTML">HTML</label><br>
+                <input type="checkbox" {{this.skills.CSS}} name="CSS" value="checked">
+                <label for="CSS">CSS</label><br>
+                <input type="checkbox" {{this.skills.Java}} name="Java" value="checked">
+                <label for="Java">Java</label><br>
+                <input type="checkbox" {{this.skills.React}} name="React" value="checked">
+                <label for="React">React</label><br>
+                <input type="checkbox" {{this.skills.Kotlin}} name="Kotlin" value="checked">
+                <label for="Kotlin">Kotlin</label><br>
                 <br>
             </fieldset>
              <div class="text-danger">
@@ -57,7 +67,7 @@
     <div class="form-group">
         <button type="submit" class="btn btn-success" name='info' value={{bttn}}>{{bttn}}</button>
         <a class="btn btn-dark" href="/employee/list"> View All <i class="fa fa-chevron-right"></i></a>
-        <a {{del}} ngIf='!bttn"' class="btn btn-danger" href="/employee/delete/{{employee._id}}"
+        <a {{del}} class="btn btn-danger" href="/employee/delete/{{employee._id}}"
             onclick="return confirm('Are you sure to delete this record ?');">Delete</a>
     </div>
 </form>
